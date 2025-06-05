@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Businesses</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-3">
+    <h1 class="text-center mb-3">Local Businesses</h1>
+    
+    <div class="mb-3">
+        <select id="typeFilter" class="form-select mb-2">
+            <option value="all">All Types</option>
+            <option value="Salon">Salon</option>
+            <option value="Mechanic">Mechanic</option>
+        </select>
+        <input id="searchInput" type="text" class="form-control" placeholder="Search...">
+    </div>
+    
+    <div id="businessList" class="row g-2"></div>
+
+    <script>
+        const businesses = [
+            {
+                name: "EK 20 SALON",
+                type: "Salon",
+                services: ["Haircuts", "Coloring"],
+                contact: "(231) 881952564"
+            },
+            {
+                name: "PIPE LINE AUTO",
+                type: "Mechanic",
+                services: ["Oil Changes", "Brake Repair"],
+                contact: "(231) 886612789"
+            },
+            {
+                name: "RED LIGHT CAR SALON",
+                type: "Salon",
+                services: ["Manicures", "Pedicures"],
+                contact: "(231) 778678909"
+            }
+        ];
+
+        function renderBusinesses(type = 'all', search = '') {
+            document.getElementById('businessList').innerHTML = businesses
+                .filter(b => (type === 'all' || b.type === type) && 
+                       b.name.toLowerCase().includes(search.toLowerCase()))
+                .map(b => `
+                    <div class="col-md-4">
+                        <div class="card p-2">
+                            <h5>${b.name}</h5>
+                            <p>Type: ${b.type}</p>
+                            <p>Services: ${b.services.join(', ')}</p>
+                            <p>Contact: ${b.contact}</p>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        document.getElementById('typeFilter').addEventListener('change', (e) => {
+            renderBusinesses(e.target.value, document.getElementById('searchInput').value);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderBusinesses(document.getElementById('typeFilter').value, e.target.value);
+        });
+
+        renderBusinesses();
+    </script>
+</body>
